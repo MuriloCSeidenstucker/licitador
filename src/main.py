@@ -38,7 +38,12 @@ def create_database():
         console.print("[bold green]✔ Database schema created successfully.[/]")
     except Exception as exc:
         logger.error("Error creating database schema: %s", exc)
-        console.print(f"[bold red]❌ Error creating database schema: {exc}[/]")
+        console.print(
+            "[bold red]❌ Error creating database schema[/]\n"
+            "• Verify that MySQL is installed\n"
+            "• Ensure it is running on port 3306\n"
+            "• Confirm username and password in the configuration file"
+        )
 
 
 if __name__ == "__main__":

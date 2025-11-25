@@ -24,3 +24,4 @@ def create_database_schema() -> None:
 
     except SQLAlchemyError as exc:
         logger.error("Error creating database schema: %s", exc)
+        raise

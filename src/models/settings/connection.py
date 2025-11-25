@@ -1,5 +1,6 @@
-# pylint: disable=C0209:consider-using-f-string
+# pylint: disable=C0209:consider-using-f-string,C0301:line-too-long
 
+from rich.console import Console
 from sqlalchemy import Engine, create_engine
 from sqlalchemy.exc import OperationalError, SQLAlchemyError
 from sqlalchemy.orm import sessionmaker
@@ -9,6 +10,7 @@ from src.logging.logger_handler import LevelName, LoggerHandler
 
 logger_handler = LoggerHandler(level=LevelName.DEBUG)
 logger = logger_handler.get_logger()
+console = Console()
 
 
 class DBConnectionHandler:
@@ -37,12 +39,19 @@ class DBConnectionHandler:
                     "Database '%s' does not exist. Attempting to create...",
                     engine.url.database,
                 )
+                console.print(
+                    f"[bold yellow]⚠ The database '{engine.url.database}' was not found.[/]\n"
+                    "Attempting to create it automatically..."
+                )
                 create_database(engine.url)
                 logger.info("Database '%s' created successfully.", engine.url.database)
             else:
                 logger.info(
                     "Database '%s' already exists. Proceeding with engine initialization.",
                     engine.url.database,
+                )
+                console.print(
+                    f"[bold green]✔ Database '{engine.url.database}' already exists. Continuing...[/]"
                 )
 
             return engine
